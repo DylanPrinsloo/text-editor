@@ -1,0 +1,18 @@
+The first is to understand that it will be a complex project, 
+but this is what i would do. First is list all the features that you want the IDE to have, every single feature (starting with the most important). 
+Following that, divide the features into categories, you are going to have a user interface, a code editor, some sort of compiler and a way to do debugging. 
+You also need to decide programming language/s it will support. Then you need to select the programming language. 
+you can use python if you like but you could also use something else like JAVA. You can make this decision based on what the features are. 
+Next you need to decide on an architecture, how do you want to structure it. Because it will consist of many "parts" consider dividing it into components and 
+each of those are developed separately, alternatively you could use micorservices. I would suggest you research if there are any already existing open source 
+IDE's that you could just modify to have the security features you want. Reuse would be ideal in this situation because you just need a standard IDE and then 
+add security to that
+ 
+In summary, you need to 
+list all that the application must do
+Divide the features into groups or "components"
+Decide on an architecture
+Decide on a language and framework (based on the features)
+Decide on a design methodology, considering reuse as that might be the fastest approach.
+
+Once you have of this information it will then become much more clearer. You can then decide from there on and create a project plan
