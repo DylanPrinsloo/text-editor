@@ -1,14 +1,30 @@
 #include <windows.h>
+#include <commctrl.h>  // Required for the ListView control
 
 // Global variables
 const char g_szClassName[] = "myWindowClass";
+HWND hListView, hEdit, hButton;
 
-// Step 1: Create a Window Procedure function to handle messages sent to the window
+// Function Prototypes
+void AddItemToListView(HWND hListView, const char* text);
+
+// Window Procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
-        case WM_CREATE:
-            // Create child windows (e.g., buttons, text fields, etc.)
-            // You can place them according to the layout you want
+        case WM_SIZE:
+            if (wParam == SIZE_MINIMIZED) {
+                // The window is being minimized, close the application
+                PostMessage(hwnd, WM_CLOSE, 0, 0);
+            }
+            break;
+
+        case WM_COMMAND:
+            if (LOWORD(wParam) == 1) { // Button clicked
+                char text[256];
+                GetWindowText(hEdit, text, sizeof(text));  // Get text from the edit control
+                AddItemToListView(hListView, text);  // Add text to the ListView
+                SetWindowText(hEdit, "");  // Clear the edit control
+            }
             break;
 
         case WM_CLOSE:
@@ -25,13 +41,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
-// Step 2: Create the main function
+// Function to add items to the ListView
+void AddItemToListView(HWND hListView, const char* text) {
+    LVITEM lvItem;
+    lvItem.mask = LVIF_TEXT;
+    lvItem.cchTextMax = 256;
+    lvItem.iItem = SendMessage(hListView, LVM_GETITEMCOUNT, 0, 0);  // Get current count of items
+    lvItem.iSubItem = 0;
+    lvItem.pszText = (LPSTR)text;
+    SendMessage(hListView, LVM_INSERTITEM, 0, (LPARAM)&lvItem);
+}
+
+// Main function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     WNDCLASSEX wc;
     HWND hwnd;
     MSG Msg;
 
-    // Step 3: Register the window class
+    // Register the window class
     wc.cbSize        = sizeof(WNDCLASSEX);
     wc.style         = 0;
     wc.lpfnWndProc   = WndProc;
@@ -50,7 +77,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
-    // Step 4: Create the window
+    // Create the window
     hwnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         g_szClassName,
@@ -64,10 +91,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
+    // Create the ListView control (grey bar)
+    hListView = CreateWindowEx(0, WC_LISTVIEW, "",
+                               WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_SINGLESEL,
+                               0, 0, 200, 600,
+                               hwnd, NULL, hInstance, NULL);
+    ListView_SetExtendedListViewStyle(hListView, LVS_EX_FULLROWSELECT);
+
+    // Add a column to the ListView
+    LVCOLUMN lvCol;
+    lvCol.mask = LVCF_TEXT | LVCF_WIDTH;
+    lvCol.pszText = "Items";
+    lvCol.cx = 190;
+    SendMessage(hListView, LVM_INSERTCOLUMN, 0, (LPARAM)&lvCol);
+
+    // Create the Edit control (black box for text input)
+    hEdit = CreateWindowEx(0, "EDIT", "",
+                           WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT,
+                           210, 10, 560, 30,
+                           hwnd, NULL, hInstance, NULL);
+
+    // Create the Button control (to add text to the list view)
+    hButton = CreateWindowEx(0, "BUTTON", "Add",
+                             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                             210, 50, 100, 30,
+                             hwnd, (HMENU)1, hInstance, NULL);
+
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
-    // Step 5: Enter the message loop
+    // Enter the message loop
     while (GetMessage(&Msg, NULL, 0, 0) > 0) {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
