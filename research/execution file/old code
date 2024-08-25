@@ -1,0 +1,129 @@
+#include <windows.h>
+#include <commctrl.h>  // Required for the ListView control
+
+// Global variables
+const char g_szClassName[] = "myWindowClass";
+HWND hListView, hEdit, hButton;
+
+// Function Prototypes
+void AddItemToListView(HWND hListView, const char* text);
+
+// Window Procedure
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_SIZE:
+            if (wParam == SIZE_MINIMIZED) {
+                // The window is being minimized, close the application
+                PostMessage(hwnd, WM_CLOSE, 0, 0);
+            }
+            break;
+
+        case WM_COMMAND:
+            if (LOWORD(wParam) == 1) { // Button clicked
+                char text[256];
+                GetWindowText(hEdit, text, sizeof(text));  // Get text from the edit control
+                AddItemToListView(hListView, text);  // Add text to the ListView
+                SetWindowText(hEdit, "");  // Clear the edit control
+            }
+            break;
+
+        case WM_CLOSE:
+            DestroyWindow(hwnd);
+            break;
+
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+// Function to add items to the ListView
+void AddItemToListView(HWND hListView, const char* text) {
+    LVITEM lvItem;
+    lvItem.mask = LVIF_TEXT;
+    lvItem.cchTextMax = 256;
+    lvItem.iItem = SendMessage(hListView, LVM_GETITEMCOUNT, 0, 0);  // Get current count of items
+    lvItem.iSubItem = 0;
+    lvItem.pszText = (LPSTR)text;
+    SendMessage(hListView, LVM_INSERTITEM, 0, (LPARAM)&lvItem);
+}
+
+// Main function
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    WNDCLASSEX wc;
+    HWND hwnd;
+    MSG Msg;
+
+    // Register the window class
+    wc.cbSize        = sizeof(WNDCLASSEX);
+    wc.style         = 0;
+    wc.lpfnWndProc   = WndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = hInstance;
+    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wc.lpszMenuName  = NULL;
+    wc.lpszClassName = g_szClassName;
+    wc.hIconSm       = LoadIcon(NULL, IDI_APPLICATION);
+
+    if (!RegisterClassEx(&wc)) {
+        MessageBox(NULL, "Window Registration Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
+        return 0;
+    }
+
+    // Create the window
+    hwnd = CreateWindowEx(
+        WS_EX_CLIENTEDGE,
+        g_szClassName,
+        "My Application",
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
+        NULL, NULL, hInstance, NULL);
+
+    if (hwnd == NULL) {
+        MessageBox(NULL, "Window Creation Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
+        return 0;
+    }
+
+    // Create the ListView control (grey bar)
+    hListView = CreateWindowEx(0, WC_LISTVIEW, "",
+                               WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_SINGLESEL,
+                               0, 0, 200, 600,
+                               hwnd, NULL, hInstance, NULL);
+    ListView_SetExtendedListViewStyle(hListView, LVS_EX_FULLROWSELECT);
+
+    // Add a column to the ListView
+    LVCOLUMN lvCol;
+    lvCol.mask = LVCF_TEXT | LVCF_WIDTH;
+    lvCol.pszText = "Items";
+    lvCol.cx = 190;
+    SendMessage(hListView, LVM_INSERTCOLUMN, 0, (LPARAM)&lvCol);
+
+    // Create the Edit control (black box for text input)
+    hEdit = CreateWindowEx(0, "EDIT", "",
+                           WS_CHILD | WS_VISIBLE | WS_BORDER | ES_LEFT,
+                           210, 10, 560, 30,
+                           hwnd, NULL, hInstance, NULL);
+
+    // Create the Button control (to add text to the list view)
+    hButton = CreateWindowEx(0, "BUTTON", "Add",
+                             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                             210, 50, 100, 30,
+                             hwnd, (HMENU)1, hInstance, NULL);
+
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+
+    // Enter the message loop
+    while (GetMessage(&Msg, NULL, 0, 0) > 0) {
+        TranslateMessage(&Msg);
+        DispatchMessage(&Msg);
+    }
+    return Msg.wParam;
+}
