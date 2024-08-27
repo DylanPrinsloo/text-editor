@@ -8,8 +8,7 @@ each of those are developed separately, alternatively you could use micorservice
 IDE's that you could just modify to have the security features you want. Reuse would be ideal in this situation because you just need a standard IDE and then 
 add security to that
  
-In summary, you need to 
-list all that the application must do
+In summary, you need to list all that the application must do
 Divide the features into groups or "components"
 Decide on an architecture
 Decide on a language and framework (based on the features)
