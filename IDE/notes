@@ -1,3 +1,21 @@
 This is only for my personal notes on how to build the enviroment/
 
 updated 2024/08/31 - ""
+
+Ctrl-V == 22 byte && Ctrl-0 == 15 byte
+
+Ctrl-M == 10 , shoudl =! 10, Needs to be 13. 
+Ctrl-J == 10
+Enter key == 10
+
+ICRNL: CR == carriage return
+
+we translate newlines ("\n") into carriages, returns ("\r\n")
+cursor is moved.
+
+OPOST is output flag, post translates to "post-proccesing of output"
+
+BRKINT ""
+INPCK ""
+ISTRIP ""
+CS8 ""
