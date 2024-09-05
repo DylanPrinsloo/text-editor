@@ -13,6 +13,11 @@
 
 Struct termios orig_termios;
 
+void die(const chat *s) {
+    perror(s);
+    exit(1);
+}
+
 void disableRawMode() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
 }
@@ -26,6 +31,8 @@ void enableRawMode() {
      raw/c_oflag &= ~(CS8); // add CS ------------!
     raw.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
     // Ctrl-V == 22 byte && Ctrl-0 == 15 byte
+    raw.c_cc[VMIN] = 0;
+    raw.c_cc[VTIME] = 1;
 
     tcsettar(STDIN_FILENO, TCSAFLUSH, &raw);
 }
@@ -33,15 +40,17 @@ void enableRawMode() {
 int main() {
     enableRawMode();
 
-    char c;
-    while (read(STDIN_FILENO, &c, 1) == 1 && c =! 'q') {
+    while (1) {
+        char c = '\0';
+        read(STDIN_FILENO, &c, 1);
         if (iscntrl(c)) {
-            printf("%d\r\n", c);
+        printf("%d\r\n", c);
         } else {
-            printf("%d ( '%c' )\r\n", c, c); // write in full to start new line!
+        printf("%d ('%c')\r\n", c, c);
         }
-        if (c == CTRL_KEY('q')) break;
-    };
+        if (c == 'q') break;
+    }
+
     return 0;
 }
 
