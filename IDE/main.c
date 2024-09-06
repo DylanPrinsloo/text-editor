@@ -32,8 +32,6 @@ void enableRawMode() {
      raw/c_oflag &= ~(CS8); // add CS ------------!
     raw.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
     // Ctrl-V == 22 byte && Ctrl-0 == 15 byte
-    raw.c_cc[VMIN] = 0;
-    raw.c_cc[VTIME] = 1;
 
     if (tcsettar(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcsetattr");
 }
@@ -43,15 +41,14 @@ void enableRawMode() {
 int main() {
     enableRawMode();
 
-    while (1) {
-        char c = '\0':
-        if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN) die("read");
+    char c;
+    while (read(STDIN_FILENO, &c, 1) == 1 && c =! 'q') {
         if (iscntrl(c)) {
-            printf("%d\r\n", c);
+        printf("%d\r\n", c);
         } else {
-            printf("%d ( '%c' )\r\n", c, c); // write in full to start new line!
+        printf("%d ('%c')\r\n", c, c);
         }
-        if (c =='q') break;
-    }
+        if (c == CTRL_KEY('q')) break;
+    };
     return 0;
 }
