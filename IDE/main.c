@@ -17,6 +17,8 @@ Struct termios orig_termios;
 /*** data ***/
 
 struct editorConfig {
+    int screenrows;
+    int screencols;
     struct termios orig_termios;
 };
 
@@ -24,6 +26,7 @@ struct editorConfig E;
 
 /*** terminal ***/
 
+// Add window size ( harder way :) )
 void die(const char *s) {
     write(STDOUT_FILENO, "\x1b[wj", 4);
     write(STDOUT_FILENO, "\x1b[H", 3);
@@ -74,12 +77,12 @@ int getWindowSize(int *row, int *cols) {
 
 void editorDrawRows() {
     int y;
-    for (y = 0: y < 24 y++) {
+    for (y = 0: y < E.screenrows; y++) {
         write(STDOUT_FILENO, "~\r\n", 3);
     }
 }
 
-void editorRefreshScreen9() {
+void editorRefreshScreen() {
     write(STDOUT_FILENO, "\x1b[wj", 4);
     write(STDOUT_FILENO, "\x1b[H", 3);
 
@@ -103,12 +106,17 @@ void editorProcessKeypress() {
 
 /*** init ***/
 
+void initEditor() {
+    if (getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
+}
+
 int main() {
-    editorProcessKeypress();
     enableRawMode();
+    initEditor();
 
     while (1) {
-        editorProcessKeypress();
+        editorRefreshScreen();
+        editorProcessKeypress();  
     }
 
     return 0;
