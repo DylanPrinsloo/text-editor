@@ -1,5 +1,7 @@
 #include <windows.h>
-#include <commctrl.h>  // Required for the ListView control
+#include <commctrl.h>  
+
+// Required for the ListView control
 
 // Global variables
 const char g_szClassName[] = "myWindowClass";
