@@ -26,7 +26,6 @@ struct editorConfig E;
 
 /*** terminal ***/
 
-// Add window size ( harder way :) )
 void die(const char *s) {
     write(STDOUT_FILENO, "\x1b[wj", 4);
     write(STDOUT_FILENO, "\x1b[H", 3);
@@ -62,11 +61,32 @@ char editorReadKey() {
     return c;
 }
 
+int getCursorPosition(int *rows, int *cols) {
+    chat buf[32];
+    unsigned int i =0;
+
+    if(write(STDOUT_FILENO, '\x1b[6n', 4) != 4) return -1;
+
+    while (i < sizeof(buf) - 1) {
+        if (read(STDOUT_FILENO, &buf[i], 1) != 1) break;
+        if (buf[i] == 'R') break;
+        i++;
+    }
+    buf[i] = '\0';
+
+    printf("\r\n&buf[1]: '%s'\r\n", &buf[1]);
+
+    editorReadKey();
+
+    return -1;
+}
+
 int getWindowSize(int *row, int *cols) {
     struct winsize ws;
 
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) {
-        return -1:
+    if (1 || ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) {
+        if (write(STDOUT_FILENO, "\x1b[999c\x1b[999B", 12) != 12) return -1;
+        return getCursorPosition(rows, cols);
     } else {
         *cols = ws.ws_col;
         *rows = ws.ws_row;
@@ -96,9 +116,10 @@ void editorRefreshScreen() {
 void editorProcessKeypress() {
     char c = editorReadKey();
 
-    switch (c)
-    {
+    switch (c) {
     case CTRL_KEY('q'):
+        write(STDOUT_FILENO, "\x1b[2j]", 4);
+        write(STDOUT_FILENO, "\x1b[2H", 3)
         exit(0);
         break;
     }
