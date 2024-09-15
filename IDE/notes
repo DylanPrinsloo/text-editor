@@ -35,6 +35,25 @@ Makefile
 # -std=c99 , helps declare variables
 
 
+# To-do-list
+'''
+The Delete key, display text files
+'''
+
+# Notice board
+'''
+Empty
+'''
+
+# Code-Time
+'''
+Started 2024/08/06 - 2024/??/??
+'''
+<-------------------------------------------------------------------------------------------------->
+
 Ensure WSL download for Linux termios usgae, see link {https://learn.microsoft.com/en-gb/windows/wsl/install} 
 
 date for doing this: 2024/09/21 
+
+<-------------------------------------------------------------------------------------------------->
+
