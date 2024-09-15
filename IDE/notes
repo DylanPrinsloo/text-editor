@@ -33,3 +33,8 @@ Makefile
 # -wall - All Warnings
 # -Wextra and -pendantic , more warnings
 # -std=c99 , helps declare variables
+
+
+Ensure WSL download for Linux termios usgae, see link {https://learn.microsoft.com/en-gb/windows/wsl/install} 
+
+date for doing this: 2024/09/21 
