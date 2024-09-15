@@ -26,3 +26,10 @@ snprintf() comes from <stdio.h>.
 We use the welcome buffer and snprintf() to interpolate our KILO_VERSION string into the welcome message. 
 We also truncate the length of the string 
 in case the terminal is too tiny to fit our welcome message.
+
+Makefile 
+# This filr allows you to simply run my main
+# $(cc) exapands
+# -wall - All Warnings
+# -Wextra and -pendantic , more warnings
+# -std=c99 , helps declare variables
