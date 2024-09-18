@@ -30,7 +30,7 @@ The primary goal of this project is to assist students in **testing**, **evaluat
 - Code Analytics using Deep Learning to track performance and give feedback on coding habits.
 --- 
 
-## If yod like to join or Contribute
+## If you would like to join or Contribute
 
 Hit me up on Linkdeln or Fork the project, pul request and vice versa.
 
