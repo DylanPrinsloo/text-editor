@@ -1,10 +1,10 @@
-# IDE-0002: Integrated Development Environment
+# text-editor 001
 
 ---
 
 ## Project Overview
 
-IDE-0002 is an **Integrated Development Environment** (IDE) specifically tailored for university students. 
+text-editor 001 is an code executable specifically tailored for university students. 
 The primary goal of this project is to assist students in **testing**, **evaluating**, and **improving** their code for **examination** and **learning** purposes.
 
 ---
