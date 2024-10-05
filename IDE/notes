@@ -1,12 +1,14 @@
 This is only for my personal notes on how to build the enviroment.
 These notes will need an update, used a paper based notes for the project. 
-updated 2024/08/31 - ""
+updated 2024/10/05
 
 Ctrl-V == 22 byte && Ctrl-0 == 15 byte
 
 Ctrl-M == 10 , shoudl =! 10, Needs to be 13. 
 Ctrl-J == 10
 Enter key == 10
+
+keys have been added, case = numbers
 
 ICRNL: CR == carriage return
 
@@ -37,12 +39,35 @@ Makefile
 
 # To-do-list
 '''
-The Delete key, display text files
+Find layout design , check Online programming compilers for ideas,
+A line viewer,
+Vertical scrolling,
+Horizontal scrolling,
+Limit scrolling ,
+snap cursor to end of line,
+Moving left at the start of a line,
+Moving right at the end of a line,
+Rendering tabs,
+Tabs and the cursor,
+Scrolling with Page Up and Page Down,
+Move to the end of the line with End,
+Status bar,
+Status message
 '''
 
 # Notice board
 '''
-Empty
+Saturday 13:00 - 15:00
+
+Sunday - No code time 
+
+Find out how to render tabs in exam mode, test mode 
+Find out how to ship exe with config files, learn security code techniques
+
+Get linux termios , see dashed lines below for instructions
+
+Learn make file syntax
+We will need a live timer, use local computer
 '''
 
 # Code-Time
@@ -53,7 +78,7 @@ Started 2024/08/06 - 2024/??/??
 
 Ensure WSL download for Linux termios usgae, see link {https://learn.microsoft.com/en-gb/windows/wsl/install} 
 
-date for doing this: 2024/09/21 
+date for doing this: 2024/10/09
 
 <-------------------------------------------------------------------------------------------------->
 
